@@ -1,26 +1,35 @@
-body {
-    margin: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+html, body, #root {
+  height: 100%;
+  margin: 0;
 }
 
 #root {
-    width: 70%;
-    height: 70%;
+    min-width: 70%;
 }
 
-.content {
+body {
+    width: 100vw;
     display: flex;
-    height: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
 .watchlist-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.boxes-container {
+    display: flex;
+    min-width: 100%;
+    height: 70%;
 }
 
 .boxes {

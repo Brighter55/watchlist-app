@@ -6,9 +6,11 @@ import Watched from "./Watched.jsx"
 function Index() {
     return (
         <div className="content">
-            <Watchlist></Watchlist>
-            <Watching></Watching>
-            <Watched></Watched>
+            <div className="boxes-container">
+                <Watchlist></Watchlist>
+                <Watching></Watching>
+                <Watched></Watched>
+            </div>
         </div>
   )
 }
