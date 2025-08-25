@@ -2,7 +2,7 @@ import Watchlist from "./Watchlist.jsx"
 import Watching from "./Watching.jsx"
 import Watched from "./Watched.jsx"
 import Index from "./Index.jsx"
-import Add from "./Add.jsx"
+import Add from "./Add/Add.jsx"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 
