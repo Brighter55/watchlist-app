@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#root {
+    width: 70%;
+    height: 70%;
+}
+
+.content {
+    display: flex;
+    height: 100%;
+}
+
+.watchlist-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.boxes {
+    border: 2px solid black;
+    flex: 1;
+    padding: 20px;
+}
