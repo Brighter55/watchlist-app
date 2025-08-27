@@ -2,6 +2,9 @@ from django.urls import path
 from . import views
 
 
+app_name = "api"
+
+
 urlpatterns = [
-    path("watchlist/", views.watchlist_add)
+    path("watchlist-add/", views.watchlist_add)
 ]
