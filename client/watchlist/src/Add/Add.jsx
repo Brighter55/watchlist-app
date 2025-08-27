@@ -13,7 +13,7 @@ function Add() {
 
         // send data to Django endpoint
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/Watchlist-add", {
+            const response = await fetch("http://127.0.0.1:8000/api/watchlist-add/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
