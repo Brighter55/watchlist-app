@@ -6,8 +6,6 @@ import Add from "./Add/Add.jsx"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 
-
-// give a page dedicated to a form
 function App() {
   return (
     <BrowserRouter>
