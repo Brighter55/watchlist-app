@@ -9,8 +9,6 @@ import React, { useEffect, useState} from "react"
 
 function App() {
   const [JWTToken, setJWTToken] = useState(null);
-  // make an async function for this fetch and call it
-  // useEffect to fetch the JWT token
   useEffect(() => {
     async function get_JWT_token() {
       try {

@@ -7,6 +7,7 @@ name = "pypi"
 django = "*"
 django-cors-headers = "*"
 pyjwt = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
