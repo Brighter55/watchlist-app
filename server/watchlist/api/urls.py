@@ -7,5 +7,5 @@ app_name = "api"
 
 urlpatterns = [
     path("watchlist-add/", views.watchlist_add),
-    path("", views.get_CSRF_token),
+    path("", views.get_JWT_token),
 ]
