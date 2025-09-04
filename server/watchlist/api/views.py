@@ -3,7 +3,7 @@ from django.conf import settings
 import json
 from datetime import datetime, timedelta
 import jwt
-
+from .models import Watchlist
 
 def watchlist_add(request):
     if request.method == "POST":
@@ -15,8 +15,11 @@ def watchlist_add(request):
         try:
             data = jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM])
             if data.get("anon"):  # if the token is for anonymous
-                movie = json.loads(request.body)["movieName"]
-                return JsonResponse({"success": f"Movie--{movie}--has been added to the database"})
+                # store in postgresDB
+                title = json.loads(request.body)["movieName"]
+                movie = Watchlist(title=title)
+                movie.save()
+                return JsonResponse({"success": f"Movie--{title}--has been added to the database"})
             else:
                 return JsonResponse({"error": "The token is not for anonymous users"}, status=403)
         except jwt.ExpiredSignatureError:
