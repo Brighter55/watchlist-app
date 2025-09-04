@@ -15,13 +15,13 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+ROOT_DIR = Path(__file__).resolve().parents[3]
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-load_dotenv(BASE_DIR / ".env")
-SECRET_KEY = "django-insecure-&t*r1t(x^0+^b1%$ub#i*2(mmjatq7^a(de=6^jzcec5xw4r8s"
+load_dotenv(ROOT_DIR / ".env")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 JWT_SECRET = SECRET_KEY
 JWT_ALGORITHM = "HS256"
 JWT_EXP_DELTA_SECONDS = 3600
