@@ -1,25 +1,45 @@
 import add from "./assets/add.png"
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import { useNavigate } from "react-router-dom"
 
 
-function Watchlist() {
-    const navigate = useNavigate()
-    const [name, setName] = useState("")
+function Watchlist(props) { // props.JWTToken is JWT token
+    const navigate = useNavigate();
+    const [movies, setMovies] = useState([]);
 
     function handleAddClicked(event) {
         navigate("/Add");
     }
 
+
+    useEffect(() => {
+        async function getMovies() {
+            try {
+                const response = await fetch("http://127.0.0.1:8000/api/watchlist/", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${props.JWTToken}`,
+                    },
+                });
+                const data = await response.json();
+                setMovies(data.movies); // list of movies ex. [{title: .., id: .., ..}]
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        getMovies();
+    }, []); // TODO: needs to be refreshed when another movie is added
+
+
+    // display titles from database
     return (
         <div className="boxes">
             <div className="watchlist-header">
                 <h1>Watchlist:</h1>
                 <img onClick={handleAddClicked} src={add} style={{width: "20px", height: "20px"}}/>
             </div>
-            <h3 style={{marginTop: 0}}>Movie 1</h3>
-            <h3>Movie 2</h3>
-            <h3>Movie 3</h3>
+            {movies.map((movie) => <h3 key={movie.id}>{movie.title}</h3>)}
         </div>
     )
 }

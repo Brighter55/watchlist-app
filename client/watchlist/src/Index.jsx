@@ -2,11 +2,11 @@ import Watchlist from "./Watchlist.jsx"
 import Watching from "./Watching.jsx"
 import Watched from "./Watched.jsx"
 
-function Index() {
+function Index(props) {
     return (
         <div className="content">
             <div className="boxes-container">
-                <Watchlist></Watchlist>
+                <Watchlist JWTToken={props.JWTToken}></Watchlist>
                 <Watching></Watching>
                 <Watched></Watched>
             </div>

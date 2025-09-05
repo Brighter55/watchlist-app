@@ -28,8 +28,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Index></Index>} />
-        <Route path="/Watchlist" element={<Watchlist></Watchlist>} />
+        <Route path="/" element={JWTToken ? <Index JWTToken={JWTToken}></Index> : <div>Loading...</div>} />
+        <Route path="/Watchlist" element={JWTToken ? <Watchlist JWTToken={JWTToken}></Watchlist> : <div>Loading...</div>} />
         <Route path="/Add" element={<Add JWTToken={JWTToken}></Add>} />
         <Route path="/Watching" element={<Watching></Watching>} />
         <Route path="/Watched" element={<Watched></Watched>}/>
