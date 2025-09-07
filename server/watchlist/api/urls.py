@@ -10,5 +10,5 @@ urlpatterns = [
     path("watchlist-add/", views.watchlist_add),
     path("", views.get_JWT_token),
     path("watching/", views.watching),
-    path("delete-movie/", views.delete_movie),
+    path("delete-add-movie/", views.delete_add_movie),
 ]

@@ -27,9 +27,9 @@ function Watching(props) {
     function handleDrop(movie) { // movie is {title: ..., id: ..., from: "Watchlist" or "Watched", to: "Watching"}
         // remove from watchlist/watched database by sending a POST to Django
         // add to watching database
-        async function deleteMovie() {
+        async function deleteAddMovie() {
             try {
-                const response = await fetch("http://127.0.0.1:8000/api/delete-movie/", {
+                const response = await fetch("http://127.0.0.1:8000/api/delete-add-movie/", {
                     method: "POST",
                     headers: {
                         "Authorization": `Bearer ${props.JWTToken}`,
@@ -45,7 +45,7 @@ function Watching(props) {
         }
 
 
-        deleteMovie();
+        deleteAddMovie();
     }
 
     return (

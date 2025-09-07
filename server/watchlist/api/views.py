@@ -74,7 +74,7 @@ def watching(request):
 
     return JsonResponse({"error": "Invalid method"}, status=405)
 
-def delete_movie(request):
+def delete_add_movie(request):
     if request.method == "POST":
         auth_header = request.headers.get("Authorization")
         if not auth_header or not auth_header.startswith("Bearer "):
@@ -84,13 +84,18 @@ def delete_movie(request):
             data = jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM])
             if data.get("anon"):
                 # delete movie from "from" database
-                data = json.loads(request.body)
-                model_name = data["from"]
+                movie = json.loads(request.body)
+                model_name = movie["from"]
                 app_name = "api"
-                ModelClass = apps.get_model(app_name, model_name)
-                movie = ModelClass.objects.get(id=data["id"])
-                movie.delete()
-                return JsonResponse({"success": f"Movie--{movie.title}--has been deleted from database"})
+                DeletedModelClass = apps.get_model(app_name, model_name)
+                deleted_movie = DeletedModelClass.objects.get(id=movie["id"])
+                deleted_movie.delete()
+                # Add movie from "to" to database
+                model_name = movie["to"]
+                AddedModelClass = apps.get_model(app_name, model_name)
+                added_movie = AddedModelClass(title=movie["title"])
+                added_movie.save()
+                return JsonResponse({"success": f"Movie--{movie['title']}--has been deleted from api_{movie['from'].lower()} and added to api_{movie['to'].lower()}"})
             else:
                 return JsonResponse({"error": "The token is not for anonymous users"}, status=403)
         except jwt.ExpiredSignatureError:
