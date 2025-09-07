@@ -39,7 +39,12 @@ function Watchlist(props) { // props.JWTToken is JWT token
                 <h1>Watchlist:</h1>
                 <img onClick={handleAddClicked} src={add} style={{width: "20px", height: "20px"}}/>
             </div>
-            {movies.map((movie) => <h3 key={movie.id}>{movie.title}</h3>)}
+            {movies.map((movie) => <h3 key={movie.id}
+                                        draggable
+                                        onDragStart={(event) => {
+                                                                    const payload = {...movie, from: "Watchlist"};
+                                                                    event.dataTransfer.setData("text/plain", JSON.stringify(payload));
+                                                                }}>{movie.title}</h3>)}
         </div>
     )
 }
