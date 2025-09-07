@@ -7,7 +7,7 @@ function Index(props) {
         <div className="content">
             <div className="boxes-container">
                 <Watchlist JWTToken={props.JWTToken}></Watchlist>
-                <Watching></Watching>
+                <Watching JWTToken={props.JWTToken}></Watching>
                 <Watched></Watched>
             </div>
         </div>

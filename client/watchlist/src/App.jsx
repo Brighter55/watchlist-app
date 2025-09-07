@@ -31,7 +31,7 @@ function App() {
         <Route path="/" element={JWTToken ? <Index JWTToken={JWTToken}></Index> : <div>Loading...</div>} />
         <Route path="/Watchlist" element={JWTToken ? <Watchlist JWTToken={JWTToken}></Watchlist> : <div>Loading...</div>} />
         <Route path="/Add" element={<Add JWTToken={JWTToken}></Add>} />
-        <Route path="/Watching" element={<Watching></Watching>} />
+        <Route path="/Watching" element={JWTToken ? <Watching JWTToken={JWTToken}></Watching> : <div>Loading...</div>} />
         <Route path="/Watched" element={<Watched></Watched>}/>
       </Routes>
     </BrowserRouter>
