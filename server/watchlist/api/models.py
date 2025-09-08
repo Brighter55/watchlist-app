@@ -6,3 +6,6 @@ class Watchlist(models.Model):
 
 class Watching(models.Model):
     title = models.CharField(max_length=100)
+
+class Watched(models.Model):
+    title = models.CharField(max_length=100)
