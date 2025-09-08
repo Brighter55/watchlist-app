@@ -57,7 +57,12 @@ function Watching(props) {
             }}
         >
             <h1>Watching:</h1>
-            {movies.map((movie) => <h3 key={movie.id} draggable onDragStart={(event) => event.dataTransfer.setData("text/plain", JSON.stringify(movie))}>{movie.title}</h3>)}
+            {movies.map((movie) => <h3 key={movie.id}
+                                       draggable
+                                       onDragStart={(event) => {
+                                                                    const payload = {...movie, from: "Watching"};
+                                                                    event.dataTransfer.setData("text/plain", JSON.stringify(payload));
+                                                               }}>{movie.title}</h3>)}
         </div>
     )
 }
