@@ -12,4 +12,5 @@ urlpatterns = [
     path("watching/", views.watching),
     path("watched/", views.watched),
     path("delete-add-movie/", views.delete_add_movie),
+    path("sign-up/", views.sign_up),
 ]

@@ -5,6 +5,9 @@ from datetime import datetime, timedelta
 import jwt
 from django.apps import apps
 from .models import Watchlist, Watching, Watched
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import SignUp
 
 def watchlist(request): # handle fetch from React and return all of the movies' title in database
     if request.method == "POST":
@@ -135,3 +138,12 @@ def get_JWT_token(request):
         token = jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
         return JsonResponse({"token": token})
     return JsonResponse({"error": "Invalid method"}, status=405)
+
+@api_view(["POST"])
+def sign_up(request):
+    new_user = json.loads(request.body)
+    serializer = SignUp(data=new_user)
+    if serializer.is_valid():
+        user = serializer.save()
+        return Response({"success": f"{user.username} is now a user"})
+    return Response({"error": f"{user.username} is not yet a user"})

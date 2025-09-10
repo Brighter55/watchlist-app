@@ -3,6 +3,8 @@ import Watching from "./Watching.jsx"
 import Watched from "./Watched.jsx"
 import Index from "./Index.jsx"
 import Add from "./Add/Add.jsx"
+import SignUp from "./SignUp.jsx"
+import SignIn from "./SignIn.jsx"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import React, { useEffect, useState} from "react"
 
@@ -28,6 +30,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/sign-up" element={<SignUp></SignUp>} />
+        <Route path="/sign-in" element={<SignIn></SignIn>} />
         <Route path="/" element={JWTToken ? <Index JWTToken={JWTToken}></Index> : <div>Loading...</div>} />
         <Route path="/Watchlist" element={JWTToken ? <Watchlist JWTToken={JWTToken}></Watchlist> : <div>Loading...</div>} />
         <Route path="/Add" element={<Add JWTToken={JWTToken}></Add>} />

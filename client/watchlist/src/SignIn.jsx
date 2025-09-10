@@ -1,0 +1,64 @@
+import React, {useState} from "react"
+
+
+function SignIn() {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    function handleSubmit() {
+        const payload = {"username": username, "password": password};
+
+
+        async function getAccessToken() {
+            try {
+                const response = await fetch("http://127.0.0.1:8000/api/get-access-token/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                })
+                const data = await response.json();
+                console.log(data.success);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        async function getRefreshToken() {
+            try {
+                const response = await fetch("http://127.0.0.1:8000/api/get-refresh-token/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                });
+                const data = await response.json();
+                console.log(data.success);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        getAccessToken();
+        getRefreshToken();
+    }
+
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <label>Username:
+                    <input name="username" value={username} onChange={(event) => setUsername(event.target.value)}></input>
+                </label>
+                <label>Password:
+                    <input name="password" value={password} onChange={(event) => setPassword(event.target.value)}></input>
+                </label>
+                <button type="submit" >Sign in</button>
+            </form>
+        </div>
+    )
+}
+
+
+export default SignIn
