@@ -7,6 +7,8 @@ from django.apps import apps
 from .models import Watchlist, Watching, Watched
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import SignUp
 
 def watchlist(request): # handle fetch from React and return all of the movies' title in database
@@ -147,3 +149,22 @@ def sign_up(request):
         user = serializer.save()
         return Response({"success": f"{user.username} is now a user"})
     return Response({"error": f"{user.username} is not yet a user"})
+
+#subclass of TokenObtainPairView
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request):
+        response = super().post(request)  # {"access": ..., "refresh": ...}
+        data = response.data
+        access = data["access"]
+        refresh = data["refresh"]
+        res = Response({"access": access})
+        res.set_cookie(
+            key="refresh_token",
+            value=refresh,
+            httponly=True,
+            secure=False,
+            samesite="None"
+            # max_age=60 * 60 * 24 * 7 for refresh to last 7 days
+        )
+        return res
+

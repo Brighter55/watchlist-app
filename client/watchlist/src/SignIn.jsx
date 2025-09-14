@@ -5,13 +5,14 @@ function SignIn() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    function handleSubmit() {
+    function handleSubmit(event) {
+        event.preventDefault();
         const payload = {"username": username, "password": password};
 
 
-        async function getAccessToken() {
+        async function getTokens() {
             try {
-                const response = await fetch("http://127.0.0.1:8000/api/get-access-token/", {
+                const response = await fetch("http://127.0.0.1:8000/api/get-tokens/", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -19,30 +20,13 @@ function SignIn() {
                     body: JSON.stringify(payload),
                 })
                 const data = await response.json();
-                console.log(data.success);
+                console.log(data);
             } catch (error) {
                 console.error("Error:", error);
             }
         }
 
-        async function getRefreshToken() {
-            try {
-                const response = await fetch("http://127.0.0.1:8000/api/get-refresh-token/", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(payload),
-                });
-                const data = await response.json();
-                console.log(data.success);
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        }
-
-        getAccessToken();
-        getRefreshToken();
+        getTokens();
     }
 
     return (
