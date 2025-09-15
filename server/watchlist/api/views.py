@@ -162,7 +162,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             key="refresh_token",
             value=refresh,
             httponly=True,
-            secure=False,
+            secure=False, # True when deployed
             samesite="None"
             # max_age=60 * 60 * 24 * 7 for refresh to last 7 days
         )
