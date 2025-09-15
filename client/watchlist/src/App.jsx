@@ -1,3 +1,4 @@
+import Index from "./Index/Index.jsx"
 import Watchlist from "./Watchlist.jsx"
 import Watching from "./Watching.jsx"
 import Watched from "./Watched.jsx"
@@ -13,9 +14,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Index></Index>} />
         <Route path="/sign-up" element={<SignUp></SignUp>} />
         <Route path="/sign-in" element={<SignIn></SignIn>} />
-        <Route path="/" element={<WatchlistManager></WatchlistManager>} />
+        <Route path="/WatchlistManager" element={<WatchlistManager></WatchlistManager>} />
         <Route path="/Watchlist" element={<Watchlist></Watchlist>} />
         <Route path="/Add" element={<Add></Add>} />
         <Route path="/Watching" element={<Watching></Watching>} />

@@ -4,7 +4,7 @@ html, body, #root {
 }
 
 #root {
-    min-width: 70%;
+    width: 70%;
 }
 
 body {
