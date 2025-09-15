@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import styles from "./Add.module.css"
 
 
-function Add(props) { // props.JWTToken is JWTToken
+function Add() { // props.JWTToken is JWTToken
     const [movieName, setMovieName] = useState("");
 
     async function handleSubmit(event) {
@@ -15,7 +15,6 @@ function Add(props) { // props.JWTToken is JWTToken
                 const response = await fetch("http://127.0.0.1:8000/api/watchlist-add/", {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${props.JWTToken}`,
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(payload),

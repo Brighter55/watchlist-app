@@ -20,7 +20,7 @@ function SignIn() {
                     body: JSON.stringify(payload),
                 })
                 const data = await response.json();
-                console.log(data);
+                console.log("Access tokens and refresh tokens have been set!");
             } catch (error) {
                 console.error("Error:", error);
             }
