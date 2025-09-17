@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 
 
-function Watching(props) {
+function Watching() {
     const [movies, setMovies] = useState([]);
 
 
@@ -10,9 +10,6 @@ function Watching(props) {
             try {
                 const response = await fetch("http://127.0.0.1:8000/api/watching/", {
                     method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${props.JWTToken}`,
-                    },
                 });
                 const data = await response.json();
                 setMovies(data.movies);
@@ -32,7 +29,6 @@ function Watching(props) {
                 const response = await fetch("http://127.0.0.1:8000/api/delete-add-movie/", {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${props.JWTToken}`,
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(movie),

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react"
 
-function Watched(props) {
+function Watched() {
     // fetch movies in api_watched
     const [movies, setMovies] = useState([]);
 
@@ -9,9 +9,6 @@ function Watched(props) {
             try {
                 const response = await fetch("http://127.0.0.1:8000/api/watched/", {
                     method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${props.JWTToken}`,
-                    },
                 });
                 const data = await response.json();
                 setMovies(data.movies);
@@ -29,7 +26,6 @@ function Watched(props) {
                 const response = await fetch("http://127.0.0.1:8000/api/delete-add-movie/", {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${props.JWTToken}`,
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(movie),

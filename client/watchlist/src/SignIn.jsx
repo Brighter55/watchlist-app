@@ -1,6 +1,5 @@
 import React, {useState} from "react"
 
-
 function SignIn() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -20,7 +19,8 @@ function SignIn() {
                     body: JSON.stringify(payload),
                 })
                 const data = await response.json();
-                console.log(data);
+                sessionStorage.setItem("access_token", data.access);
+                console.log("Access key:", sessionStorage.getItem("access_token"));
             } catch (error) {
                 console.error("Error:", error);
             }
