@@ -1,8 +1,8 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import styles from "./Add.module.css"
 
 
-function Add() { // props.JWTToken is JWTToken
+function Add() { //
     const [movieName, setMovieName] = useState("");
 
     async function handleSubmit(event) {
@@ -10,12 +10,13 @@ function Add() { // props.JWTToken is JWTToken
 
         // send data to Django endpoint
         async function submitMovie() {
-            const payload = {movieName: movieName};
+            const payload = {movieName: movieName}; // needs access token to add
             try {
                 const response = await fetch("http://127.0.0.1:8000/api/watchlist-add/", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        "Authorization": `Bearer ${sessionStorage.getItem("access_token")}`,
                     },
                     body: JSON.stringify(payload),
                 });

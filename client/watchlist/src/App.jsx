@@ -8,7 +8,6 @@ import SignUp from "./SignUp.jsx"
 import SignIn from "./SignIn.jsx"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
-
 function App() {
 
   return (

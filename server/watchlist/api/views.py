@@ -1,13 +1,11 @@
 from django.http import JsonResponse
 from django.conf import settings
 import json
-from datetime import datetime, timedelta
-import jwt
 from django.apps import apps
 from .models import Watchlist, Watching, Watched
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import SignUp
 
@@ -19,14 +17,18 @@ def watchlist(request): # handle fetch from React and return all of the movies' 
         return JsonResponse({"movies": movies})
     return JsonResponse({"error": "Invalid method"}, status=405)
 
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])  # Only logged in users
 def watchlist_add(request):
-    if request.method == "POST":
-        # store in postgresDB
-        title = json.loads(request.body)["movieName"]
-        movie = Watchlist(title=title)
-        movie.save()
-        return JsonResponse({"success": f"Movie--{title}--has been added to the database"})
-    return JsonResponse({"error": "Invalid method"}, status=405)
+    # check for access token in headers->Authorization
+    # store in postgresDB
+    data = json.loads(request.body)
+    title = data["movieName"]
+    user_id = request.user.id
+    username = request.user.username
+    movie = Watchlist(title=title, user_id=user_id)
+    movie.save()
+    return Response({"success": f"{movie} has been added to {username}'s database and his user id is {user_id}"})
 
 def watching(request):
     if request.method == "POST":
@@ -62,6 +64,7 @@ def watched(request):
     return JsonResponse({"error": "Invalid method"}, status=405)
 
 @api_view(["POST"])
+@permission_classes([AllowAny])
 def sign_up(request):
     new_user = json.loads(request.body)
     serializer = SignUp(data=new_user)
