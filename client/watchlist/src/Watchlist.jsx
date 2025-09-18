@@ -3,7 +3,7 @@ import React, {useState, useEffect} from "react"
 import { useNavigate } from "react-router-dom"
 
 
-function Watchlist() { // props.JWTToken is JWT token
+function Watchlist() {
     const navigate = useNavigate();
     const [movies, setMovies] = useState([]);
 
@@ -13,13 +13,14 @@ function Watchlist() { // props.JWTToken is JWT token
 
 
     useEffect(() => {
-        async function getMovies() {
+        async function getMovies() { // needs to send access key
             try {
                 const response = await fetch("http://127.0.0.1:8000/api/watchlist/", {
                     method: "POST",
+                    headers: {"Authorization": `Bearer ${sessionStorage.getItem("access_token")}`},
                 });
                 const data = await response.json();
-                setMovies(data.movies); // list of movies ex. [{title: .., id: .., ..}]
+                setMovies(data.movies);
             } catch (error) {
                 console.error("Error:", error);
             }

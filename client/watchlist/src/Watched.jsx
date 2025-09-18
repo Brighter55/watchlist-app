@@ -9,6 +9,7 @@ function Watched() {
             try {
                 const response = await fetch("http://127.0.0.1:8000/api/watched/", {
                     method: "POST",
+                    headers: {"Authorization": `Bearer ${sessionStorage.getItem("access_token")}`},
                 });
                 const data = await response.json();
                 setMovies(data.movies);
