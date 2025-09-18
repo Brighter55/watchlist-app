@@ -36,6 +36,7 @@ function Watchlist() {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        "Authorization": `Bearer ${sessionStorage.getItem("access_token")}`,
                     },
                     body: JSON.stringify(movie),
                 });

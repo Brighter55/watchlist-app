@@ -16,7 +16,7 @@ def watchlist(request): # handle fetch from React and return all of the movies' 
     movies = []
     for movie in Watchlist.objects.all():
         if movie.user_id == user_id:
-            movies.append({"title": movie.title, "id": movie.id})
+            movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
     return Response({"movies": movies})
 
 @api_view(["POST"])
@@ -39,25 +39,25 @@ def watching(request):
     movies = []
     for movie in Watching.objects.all():
         if movie.user_id == user_id:
-            movies.append({"title": movie.title, "id": movie.id})
+            movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
     return Response({"movies": movies})
 
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def delete_add_movie(request):
-    if request.method == "POST":
-        # delete movie from "from" database
-        movie = json.loads(request.body)
-        model_name = movie["from"]
-        app_name = "api"
-        DeletedModelClass = apps.get_model(app_name, model_name)
-        deleted_movie = DeletedModelClass.objects.get(id=movie["id"])
-        deleted_movie.delete()
-        # Add movie from "to" to database
-        model_name = movie["to"]
-        AddedModelClass = apps.get_model(app_name, model_name)
-        added_movie = AddedModelClass(title=movie["title"])
-        added_movie.save()
-        return JsonResponse({"success": f"Movie--{movie['title']}--has been deleted from api_{movie['from'].lower()} and added to api_{movie['to'].lower()}"})
-    return JsonResponse({"error": "Invalid method"}, status=405)
+    # delete movie from "from" database
+    movie = json.loads(request.body)
+    model_name = movie["from"]
+    app_name = "api"
+    DeletedModelClass = apps.get_model(app_name, model_name)
+    deleted_movie = DeletedModelClass.objects.get(id=movie["id"])
+    deleted_movie.delete()
+    # Add movie from "to" to database
+    model_name = movie["to"]
+    AddedModelClass = apps.get_model(app_name, model_name)
+    added_movie = AddedModelClass(title=movie["title"], user_id=movie["user_id"])
+    added_movie.save()
+    return JsonResponse({"success": f"Movie--{movie['title']}--has been deleted from api_{movie['from'].lower()} and added to api_{movie['to'].lower()}"})
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -66,7 +66,7 @@ def watched(request):
     movies = []
     for movie in Watched.objects.all():
         if movie.user_id == user_id:
-            movies.append({"title": movie.title, "id": movie.id})
+            movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
     return Response({"movies": movies})
 
 @api_view(["POST"])
