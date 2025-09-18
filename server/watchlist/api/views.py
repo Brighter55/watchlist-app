@@ -9,13 +9,15 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import SignUp
 
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def watchlist(request): # handle fetch from React and return all of the movies' title in database
-    if request.method == "POST":
-        movies = []
-        for movie in Watchlist.objects.all():
+    user_id = request.user.id
+    movies = []
+    for movie in Watchlist.objects.all():
+        if movie.user_id == user_id:
             movies.append({"title": movie.title, "id": movie.id})
-        return JsonResponse({"movies": movies})
-    return JsonResponse({"error": "Invalid method"}, status=405)
+    return Response({"movies": movies})
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])  # Only logged in users
@@ -30,13 +32,15 @@ def watchlist_add(request):
     movie.save()
     return Response({"success": f"{movie} has been added to {username}'s database and his user id is {user_id}"})
 
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def watching(request):
-    if request.method == "POST":
-        movies = []
-        for movie in Watching.objects.all():
+    user_id = request.user.id
+    movies = []
+    for movie in Watching.objects.all():
+        if movie.user_id == user_id:
             movies.append({"title": movie.title, "id": movie.id})
-        return JsonResponse({"movies": movies})
-    return JsonResponse({"error": "Invalid method"}, status=405)
+    return Response({"movies": movies})
 
 def delete_add_movie(request):
     if request.method == "POST":
@@ -55,13 +59,15 @@ def delete_add_movie(request):
         return JsonResponse({"success": f"Movie--{movie['title']}--has been deleted from api_{movie['from'].lower()} and added to api_{movie['to'].lower()}"})
     return JsonResponse({"error": "Invalid method"}, status=405)
 
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def watched(request):
-    if request.method == "POST":
-        movies = []
-        for movie in Watched.objects.all():
+    user_id = request.user.id
+    movies = []
+    for movie in Watched.objects.all():
+        if movie.user_id == user_id:
             movies.append({"title": movie.title, "id": movie.id})
-        return JsonResponse({"movies": movies})
-    return JsonResponse({"error": "Invalid method"}, status=405)
+    return Response({"movies": movies})
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
