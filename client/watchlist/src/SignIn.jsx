@@ -17,7 +17,7 @@ function SignIn() {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(payload),
-                })
+                });
                 const data = await response.json();
                 sessionStorage.setItem("access_token", data.access);
                 console.log("Access key:", sessionStorage.getItem("access_token"));

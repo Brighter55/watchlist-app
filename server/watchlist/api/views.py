@@ -8,16 +8,36 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import SignUp
+from django.contrib.auth.models import User
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
+def get_users(request):
+    users = []
+    for user in User.objects.all():
+        users.append({"id": user.id, "username": user.username})
+    return Response({"users": users})
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
 def watchlist(request): # handle fetch from React and return all of the movies' title in database
-    user_id = request.user.id
-    movies = []
-    for movie in Watchlist.objects.all():
-        if movie.user_id == user_id:
-            movies.append({"title": movie.title, "id": movie.id})
-    return Response({"movies": movies})
+    if request.user.is_authenticated:
+        user_id = request.user.id
+        movies = []
+        for movie in Watchlist.objects.all():
+            if movie.user_id == user_id:
+                movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
+        return Response({"movies": movies})
+    else:
+        data = json.loads(request.body)
+        user_id = int(data["owner"])
+        movies = []
+        for movie in Watchlist.objects.all():
+            if movie.user_id == user_id:
+                movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
+        return Response({"movies": movies})
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])  # Only logged in users
@@ -33,41 +53,59 @@ def watchlist_add(request):
     return Response({"success": f"{movie} has been added to {username}'s database and his user id is {user_id}"})
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def watching(request):
-    user_id = request.user.id
-    movies = []
-    for movie in Watching.objects.all():
-        if movie.user_id == user_id:
-            movies.append({"title": movie.title, "id": movie.id})
-    return Response({"movies": movies})
-
-def delete_add_movie(request):
-    if request.method == "POST":
-        # delete movie from "from" database
-        movie = json.loads(request.body)
-        model_name = movie["from"]
-        app_name = "api"
-        DeletedModelClass = apps.get_model(app_name, model_name)
-        deleted_movie = DeletedModelClass.objects.get(id=movie["id"])
-        deleted_movie.delete()
-        # Add movie from "to" to database
-        model_name = movie["to"]
-        AddedModelClass = apps.get_model(app_name, model_name)
-        added_movie = AddedModelClass(title=movie["title"])
-        added_movie.save()
-        return JsonResponse({"success": f"Movie--{movie['title']}--has been deleted from api_{movie['from'].lower()} and added to api_{movie['to'].lower()}"})
-    return JsonResponse({"error": "Invalid method"}, status=405)
+    if request.user.is_authenticated:
+        user_id = request.user.id
+        movies = []
+        for movie in Watching.objects.all():
+            if movie.user_id == user_id:
+                movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
+        return Response({"movies": movies})
+    else:
+        data = json.loads(request.body)
+        user_id = int(data["owner"])
+        movies = []
+        for movie in Watching.objects.all():
+            if movie.user_id == user_id:
+                movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
+        return Response({"movies": movies})
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
+def delete_add_movie(request):
+    # delete movie from "from" database
+    movie = json.loads(request.body)
+    model_name = movie["from"]
+    app_name = "api"
+    DeletedModelClass = apps.get_model(app_name, model_name)
+    deleted_movie = DeletedModelClass.objects.get(id=movie["id"])
+    deleted_movie.delete()
+    # Add movie from "to" to database
+    model_name = movie["to"]
+    AddedModelClass = apps.get_model(app_name, model_name)
+    added_movie = AddedModelClass(title=movie["title"], user_id=movie["user_id"])
+    added_movie.save()
+    return JsonResponse({"success": f"Movie--{movie['title']}--has been deleted from api_{movie['from'].lower()} and added to api_{movie['to'].lower()}"})
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
 def watched(request):
-    user_id = request.user.id
-    movies = []
-    for movie in Watched.objects.all():
-        if movie.user_id == user_id:
-            movies.append({"title": movie.title, "id": movie.id})
-    return Response({"movies": movies})
+    if request.user.is_authenticated:
+        user_id = request.user.id
+        movies = []
+        for movie in Watched.objects.all():
+            if movie.user_id == user_id:
+                movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
+        return Response({"movies": movies})
+    else:
+        data = json.loads(request.body)
+        user_id = int(data["owner"])
+        movies = []
+        for movie in Watched.objects.all():
+            if movie.user_id == user_id:
+                movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
+        return Response({"movies": movies})
 
 @api_view(["POST"])
 @permission_classes([AllowAny])

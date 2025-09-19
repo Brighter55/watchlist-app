@@ -12,6 +12,7 @@ urlpatterns = [
     path("watched/", views.watched),
     path("delete-add-movie/", views.delete_add_movie),
     path("sign-up/", views.sign_up),
+    path("get-users/", views.get_users),
     path("get-tokens/", views.CustomTokenObtainPairView.as_view()),
     path("refresh-token/", TokenRefreshView.as_view()),
 ]
