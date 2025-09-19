@@ -7,15 +7,29 @@ function Watching() {
 
     useEffect(() => {
         async function getMovies() {
-            try {
-                const response = await fetch("http://127.0.0.1:8000/api/watching/", {
-                    method: "POST",
-                    headers: {"Authorization": `Bearer ${sessionStorage.getItem("access_token")}`},
-                });
-                const data = await response.json();
-                setMovies(data.movies);
-            } catch (error) {
-                console.error("Error:", error)
+            if (sessionStorage.getItem("access_token")) {
+                try {
+                    const response = await fetch("http://127.0.0.1:8000/api/watching/", {
+                        method: "POST",
+                        headers: {"Authorization": `Bearer ${sessionStorage.getItem("access_token")}`},
+                    });
+                    const data = await response.json();
+                    setMovies(data.movies);
+                } catch (error) {
+                    console.error("Error:", error)
+                }
+            } else {
+                try {
+                    const response = await fetch("http://127.0.0.1:8000/api/watching/", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({owner: sessionStorage.getItem("owner")}),
+                    });
+                    const data = await response.json();
+                    setMovies(data.movies);
+                } catch (error) {
+                    console.error("Error:", error)
+                }
             }
         }
 
@@ -37,6 +51,7 @@ function Watching() {
                 });
                 const data = await response.json();
                 console.log(data.success);
+                window.location.reload();
             } catch (error) {
                 console.error("Error:", error);
             }
