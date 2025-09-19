@@ -3,7 +3,7 @@ from django.conf import settings
 import json
 from django.apps import apps
 from .models import Watchlist, Watching, Watched
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -21,23 +21,23 @@ def get_users(request):
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def watchlist(request): # handle fetch from React and return all of the movies' title in database
-    if request.user.is_authenticated:
-        user_id = request.user.id
+    data = json.loads(request.body)
+    owner = int(data["owner"])
+    user_id = request.user.id
+    if request.user.is_authenticated and user_id == owner:
         movies = []
         for movie in Watchlist.objects.all():
             if movie.user_id == user_id:
                 movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
         return Response({"movies": movies})
     else:
-        data = json.loads(request.body)
-        user_id = int(data["owner"])
         movies = []
         for movie in Watchlist.objects.all():
-            if movie.user_id == user_id:
+            if movie.user_id == owner:
                 movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
         return Response({"movies": movies})
-
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])  # Only logged in users
@@ -54,20 +54,21 @@ def watchlist_add(request):
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def watching(request):
-    if request.user.is_authenticated:
-        user_id = request.user.id
+    data = json.loads(request.body)
+    owner = int(data["owner"])
+    user_id = request.user.id
+    if request.user.is_authenticated and user_id == owner:
         movies = []
         for movie in Watching.objects.all():
             if movie.user_id == user_id:
                 movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
         return Response({"movies": movies})
     else:
-        data = json.loads(request.body)
-        user_id = int(data["owner"])
         movies = []
         for movie in Watching.objects.all():
-            if movie.user_id == user_id:
+            if movie.user_id == owner:
                 movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
         return Response({"movies": movies})
 
@@ -90,20 +91,21 @@ def delete_add_movie(request):
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def watched(request):
-    if request.user.is_authenticated:
-        user_id = request.user.id
+    data = json.loads(request.body)
+    owner = int(data["owner"])
+    user_id = request.user.id
+    if request.user.is_authenticated and user_id == owner:
         movies = []
         for movie in Watched.objects.all():
             if movie.user_id == user_id:
                 movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
         return Response({"movies": movies})
     else:
-        data = json.loads(request.body)
-        user_id = int(data["owner"])
         movies = []
         for movie in Watched.objects.all():
-            if movie.user_id == user_id:
+            if movie.user_id == owner:
                 movies.append({"title": movie.title, "id": movie.id, "user_id": movie.user_id})
         return Response({"movies": movies})
 

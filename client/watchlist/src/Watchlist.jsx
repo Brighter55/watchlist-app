@@ -14,34 +14,24 @@ function Watchlist() {
 
     useEffect(() => {
         async function getMovies() { // needs to send access key
-            if (sessionStorage.getItem("access_token")) {
-                try {
-                    const response = await fetch("http://127.0.0.1:8000/api/watchlist/", {
-                        method: "POST",
-                        headers: {"Authorization": `Bearer ${sessionStorage.getItem("access_token")}`},
-                    });
-                    const data = await response.json();
-                    setMovies(data.movies);
-                } catch (error) {
-                    console.error("Error:", error)
-                }
-            } else {
-                try {
-                    const response = await fetch("http://127.0.0.1:8000/api/watchlist/", {
-                        method: "POST",
-                        headers: {"Content-Type": "application/json"},
-                        body: JSON.stringify({owner: sessionStorage.getItem("owner")}),
-                    });
-                    const data = await response.json();
-                    setMovies(data.movies);
-                } catch (error) {
-                    console.error("Error:", error)
-                }
+            try {
+                const response = await fetch("http://127.0.0.1:8000/api/watchlist/", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${sessionStorage.getItem("access_token")}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({owner: sessionStorage.getItem("owner")}),
+                });
+                const data = await response.json();
+                setMovies(data.movies);
+            } catch (error) {
+                console.error("Error:", error)
             }
         }
 
         getMovies();
-    }, []); // TODO: needs to be refreshed when another movie is added
+    }, []);
 
     function handleDrop(movie) {
         async function deleteAddMovie() {
