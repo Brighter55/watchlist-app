@@ -45,8 +45,11 @@ def watchlist_add(request):
     # check for access token in headers->Authorization
     # store in postgresDB
     data = json.loads(request.body)
+    owner = int(data["owner"])
     title = data["movieName"]
     user_id = request.user.id
+    if user_id != owner:  # check if authorized user is adding a movie in their table
+        return Response({"error": "This is not your table!"})
     username = request.user.username
     movie = Watchlist(title=title, user_id=user_id)
     movie.save()
@@ -75,6 +78,11 @@ def watching(request):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def delete_add_movie(request):
+    # check if authorized user is in their table
+    data = json.loads(request.body)
+    owner = int(data["owner"])
+    if request.user.id != owner:
+        return Response({"error": "This is not your table"}, status=400)
     # delete movie from "from" database
     movie = json.loads(request.body)
     model_name = movie["from"]
@@ -87,7 +95,7 @@ def delete_add_movie(request):
     AddedModelClass = apps.get_model(app_name, model_name)
     added_movie = AddedModelClass(title=movie["title"], user_id=movie["user_id"])
     added_movie.save()
-    return JsonResponse({"success": f"Movie--{movie['title']}--has been deleted from api_{movie['from'].lower()} and added to api_{movie['to'].lower()}"})
+    return Response({"success": f"Movie--{movie['title']}--has been deleted from api_{movie['from'].lower()} and added to api_{movie['to'].lower()}"})
 
 @api_view(["POST"])
 @permission_classes([AllowAny])

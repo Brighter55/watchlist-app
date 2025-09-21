@@ -10,7 +10,10 @@ function Add() { //
 
         // send data to Django endpoint
         async function submitMovie() {
-            const payload = {movieName: movieName}; // needs access token to add
+            const payload = {
+                movieName: movieName,
+                owner: sessionStorage.getItem("owner"),
+            }; // needs access token to add
             try {
                 const response = await fetch("http://127.0.0.1:8000/api/watchlist-add/", {
                     method: "POST",
@@ -36,7 +39,7 @@ function Add() { //
             <div className={styles.formContent}>
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.group}>
-                    <input className={styles.input} name="name" value={movieName} onChange={(event) => setMovieName(event.target.value)} placeholder="Enter your movie name" />
+                    <input className={styles.input} name="name" value={movieName} onChange={(event) => setMovieName(event.target.value)} placeholder="Enter your movie name" autocomplete="off"/>
                     <span className={styles.highlight}></span>
                     <span className={styles.bar}></span>
                 </div>

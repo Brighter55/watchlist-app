@@ -34,7 +34,7 @@ function Watched() {
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${sessionStorage.getItem("access_token")}`,
                     },
-                    body: JSON.stringify(movie),
+                    body: JSON.stringify({...movie, owner: sessionStorage.getItem("owner")}),
                 });
                 const data = await response.json();
                 console.log(data.success);
