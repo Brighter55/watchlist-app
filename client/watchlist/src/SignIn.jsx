@@ -33,10 +33,10 @@ function SignIn() {
         <div>
             <form onSubmit={handleSubmit}>
                 <label>Username:
-                    <input name="username" value={username} onChange={(event) => setUsername(event.target.value)}></input>
+                    <input name="username" value={username} onChange={(event) => setUsername(event.target.value)} autocomplete="off"></input>
                 </label>
                 <label>Password:
-                    <input name="password" value={password} onChange={(event) => setPassword(event.target.value)}></input>
+                    <input name="password" value={password} onChange={(event) => setPassword(event.target.value)} autocomplete="off"></input>
                 </label>
                 <button type="submit" >Sign in</button>
             </form>
